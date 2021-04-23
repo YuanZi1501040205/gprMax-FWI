@@ -1,0 +1,13 @@
+#title: cross boreholes B-scan with one box buried in the ground
+#domain: 5.0 5.0 0.1
+#dx_dy_dz: 0.1 0.1 0.1
+#time_window: 1e-07
+#waveform: ricker 1.0 5e7 mysource
+#hertzian_dipole: z 1.5 1.5 0.0 mysource
+#rx_array: 1.5 1.5 0 3.5 3.5 0.0 0.1 0.1 0.0
+#material: 5.5 0.0028 1.0 0.0 mid
+#box: 0.0 0.0 0.0 5.0 5.0 0.1 mid
+#material: 6.5 0.0028 1.0 0.0 pipe
+#cylinder: 2.5 2.5 0.0 2.5 2.5 0.1 0.5 pipe
+#geometry_view: 0.0 0.0 0.0 5.0 5.0 0.1 0.1 0.1 0.1 cross_well_half_space n
+
