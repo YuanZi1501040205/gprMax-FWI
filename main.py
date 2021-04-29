@@ -37,7 +37,7 @@ def main():
     c_tensor = torch.zeros((50, 50)) + 0.0028
 
 
-    for epoch in range(3):
+    for epoch in range(10):
         for i in range(inverser.num_shot):
             inverser.build_model(permittivity_tensor=p_tensor, conductivity_tensor=c_tensor,
                                  gt_gprmaxin_file='/home/yzi/research/gprMax-FWI/output/forward/forward_gt/cross_well_cylinder_B_scan_shot_'+str(i)+'.in'
@@ -96,18 +96,18 @@ def main():
             inverser.p_conju_grad = inverser.p_grad_fields + inverser.p_conju_grad_cache * (
                         inverser.p_grad_fields * (inverser.p_grad_fields - inverser.p_grad_cache)) / (
                                                 inverser.p_grad_cache * inverser.p_grad_cache)
-            inverser.c_conju_grad = inverser.c_grad_fields + inverser.c_conju_grad_cache * (
-                        inverser.c_grad_fields * (inverser.c_grad_fields - inverser.c_grad_cache)) / (
-                                                inverser.c_grad_cache * inverser.c_grad_cache)
+            # inverser.c_conju_grad = inverser.c_grad_fields + inverser.c_conju_grad_cache * (
+            #             inverser.c_grad_fields * (inverser.c_grad_fields - inverser.c_grad_cache)) / (
+            #                                     inverser.c_grad_cache * inverser.c_grad_cache)
 
-        p_step = inverser.calc_step(p_tensor=p_tensor, c_tensor=c_tensor, kappa_p=1e-8, mode='p')
-        #c_step = inverser.calc_step(p_tensor=p_tensor, c_tensor=c_tensor, kappa_p=1e5, mode='c')
+        p_step = inverser.calc_step(p_tensor=p_tensor, c_tensor=c_tensor, kappa_p=1e-9, mode='p')
+        # c_step = inverser.calc_step(p_tensor=p_tensor, c_tensor=c_tensor, kappa_p=1e-12, mode='c')
         steps.append(p_step)
         gradients_scale.append(inverser.p_conju_grad[5:-5, :].mean().numpy())
         #print('c_step:', c_step)
 
         p_tensor[20:31, 15:36] = p_tensor[20:31, 15:36] - p_step * inverser.p_conju_grad[5:-5, :]
-        #c_tensor[20:31, 15:36] = c_tensor[20:31, 15:36] - c_step * inverser.c_conju_grad[5:-5, :]
+        # c_tensor[20:31, 15:36] = c_tensor[20:31, 15:36] - c_step * inverser.c_conju_grad[5:-5, :]
 
         # p_tensor[20:31, 15:36] = torch.exp(p_log - p_step * inverser.p_conju_grad[5:-5, :])
         # c_tensor[20:31, 15:36] = torch.exp(c_log - c_step * inverser.c_conju_grad[5:-5, :])
@@ -127,8 +127,8 @@ def main():
         # store gradient to cache
         inverser.p_grad_cache = torch.clone(inverser.p_grad_fields)
         inverser.p_conju_grad_cache = torch.clone(inverser.p_conju_grad)
-        inverser.c_grad_cache = torch.clone(inverser.c_grad_fields)
-        inverser.c_conju_grad_cache = torch.clone(inverser.c_conju_grad)
+        # inverser.c_grad_cache = torch.clone(inverser.c_grad_fields)
+        # inverser.c_conju_grad_cache = torch.clone(inverser.c_conju_grad)
 
         plot_final_section(path_figures='/home/yzi/research/gprMax-FWI/output/figures',
                            para_matrix=p_tensor, epoch=epoch, mode='p')
